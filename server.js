@@ -4,7 +4,7 @@
 
 //Load required modules
 var express = require('express');
-var cmdExists = require('command-exists');
+var cmdExists = require('command-exists').sync;
 var fs = require('fs');
 
 var app = express();
@@ -14,9 +14,14 @@ const PORT = 4000;
 const SERVER_ROOT = __dirname+'/server';
 const BROWSER_ROOT = __dirname+'/interface';
 
+var ytdlInstalled = cmdExists('youtube-dl');
+
 //respond to request for index.html
 app.get('/', function(req, res){
-    res.sendFile( BROWSER_ROOT + '/index.html');
+    if(ytdlInstalled){
+    	res.sendFile( BROWSER_ROOT + '/index.html');
+    }
+    else res.send('Please install youtube-dl');
 });
 
 //Setup express static server

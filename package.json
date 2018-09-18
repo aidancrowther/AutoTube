@@ -1,0 +1,20 @@
+{
+  "name": "autotube",
+  "version": "0.0.1",
+  "description": "Web service for automatically downloading and managing youtube videos",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/aidancrowther/AutoTube"
+  },
+  "author": "Aidan Crowther",
+  "license": "ISC",
+  "dependencies": {
+    "command-exists": "^1.2.7",
+    "express": "^4.16.3"
+  }
+}

@@ -3,10 +3,16 @@
 */
 
 //Load required modules
-var express = require('express');
-var cmdExists = require('command-exists').sync;
-var fs = require('fs');
+const express = require('express');
+const cmdExists = require('command-exists').sync;
+const fs = require('fs');
+const bodyParser = require('body-parser');
+const axios = require('axios');
+const youtube = require('scrape-youtube');
 
+//https://www.youtube.com/results?search_query=ltt&sp=EgIQAg%253D%253D
+
+var urlEncodedParser = bodyParser.urlencoded({ extended: true });
 var app = express();
 
 //Setup server side globals
@@ -24,6 +30,26 @@ app.get('/', function(req, res){
     else res.send('Please install youtube-dl');
 });
 
+app.get('/channelQuery', urlEncodedParser, async (req, res) => {
+    let channel = req.query.channel;
+    //channelQuery(channel)
+    let searchResult = await (await channelQuery(channel)).channels;
+
+    for(let suggestion of searchResult){
+        console.log(suggestion.name);
+    }
+
+    res.sendStatus(200);
+});
+
 //Setup express static server
 app.use(express.static('interface'));
 app.listen(PORT, function(err){if(err) console.log(err)});
+
+const channelQuery = async(searchTerm) => {
+    try {
+        return await youtube.search(searchTerm, { type: 'channel' });
+      } catch (error) {
+        console.error(error);
+      }
+}
